@@ -52,18 +52,6 @@ public interface ICommandAppSettings
     IAnsiConsole? Console { get; set; }
 
     /// <summary>
-    /// Gets or sets the <see cref="ICommandInterceptor"/> used
-    /// to intercept settings before it's being sent to the command.
-    /// </summary>
-    [Obsolete("Register the interceptor with the ITypeRegistrar.")]
-    ICommandInterceptor? Interceptor { get; set; }
-
-    /// <summary>
-    /// Gets the type registrar.
-    /// </summary>
-    ITypeRegistrarFrontend Registrar { get; }
-
-    /// <summary>
     /// Gets or sets case sensitivity.
     /// </summary>
     CaseSensitivity CaseSensitivity { get; set; }
@@ -82,22 +70,7 @@ public interface ICommandAppSettings
     bool ConvertFlagsToRemainingArguments { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not exceptions should be propagated.
-    /// <para>Setting this to <c>true</c> will disable default Exception handling and
-    /// any <see cref="ExceptionHandler"/>, if set.</para>
-    /// </summary>
-    bool PropagateExceptions { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not examples should be validated.
     /// </summary>
     bool ValidateExamples { get; set; }
-
-    /// <summary>
-    /// Gets or sets a handler for Exceptions.
-    /// <para>This handler will not be called, if <see cref="PropagateExceptions"/> is set to <c>true</c>.</para>
-    /// The <see cref="ITypeResolver"/> argument will only be not-null, when the exception occurs during execution of
-    /// a command. I.e. only when the resolver is available.
-    /// </summary>
-    public Func<Exception, ITypeResolver?, int>? ExceptionHandler { get; set; }
 }

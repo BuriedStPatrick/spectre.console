@@ -18,8 +18,8 @@ public sealed partial class CommandAppTests
                 {
                     animal.AddBranch<MammalSettings>("mammal", mammal =>
                     {
-                        mammal.AddCommand<DogCommand>("dog");
-                        mammal.AddCommand<HorseCommand>("horse");
+                        mammal.AddCommand<DogCommand, DogSettings>("dog");
+                        mammal.AddCommand<HorseCommand, HorseSettings>("horse");
                     });
                 });
             });
@@ -59,8 +59,8 @@ public sealed partial class CommandAppTests
             {
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
-                    animal.AddCommand<HorseCommand>("horse");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse");
                 });
             });
 
@@ -81,7 +81,7 @@ public sealed partial class CommandAppTests
             {
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
                 });
             });
 
@@ -183,7 +183,7 @@ public sealed partial class CommandAppTests
             {
                 configuration.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
 
                     animal.SetDefaultCommand<HorseCommand>();
                 });
@@ -207,7 +207,7 @@ public sealed partial class CommandAppTests
             {
                 configuration.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
 
                     animal.SetDefaultCommand<HorseCommand>();
                 });

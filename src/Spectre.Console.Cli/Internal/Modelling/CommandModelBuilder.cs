@@ -43,16 +43,16 @@ internal static class CommandModelBuilder
         return model;
     }
 
-    private static CommandInfo Build(CommandInfo? parent, ConfiguredCommand command)
+    private static CommandInfo Build(CommandInfo? parent, CommandDefinitionBuilder<,> commandDefinitionBuilder)
     {
-        var info = new CommandInfo(parent, command);
+        var info = new CommandInfo(parent, commandDefinitionBuilder);
 
         foreach (var parameter in GetParameters(info))
         {
             info.Parameters.Add(parameter);
         }
 
-        foreach (var childCommand in command.Children)
+        foreach (var childCommand in commandDefinitionBuilder.Children)
         {
             var child = Build(info, childCommand);
             info.Children.Add(child);

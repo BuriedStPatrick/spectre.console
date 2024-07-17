@@ -8,17 +8,17 @@ internal interface IConfiguration
     /// <summary>
     /// Gets the configured commands.
     /// </summary>
-    IList<ConfiguredCommand> Commands { get; }
+    IList<ICommandDefinitionBuilder> Commands { get; }
 
     /// <summary>
     /// Gets the settings for the configuration.
     /// </summary>
-    CommandAppSettings Settings { get; }
+    ICommandAppSettings Settings { get; }
 
     /// <summary>
     /// Gets the default command for the configuration.
     /// </summary>
-    ConfiguredCommand? DefaultCommand { get; }
+    ICommandDefinitionBuilder? DefaultCommand { get; }
 
     /// <summary>
     /// Gets all examples for the configuration.

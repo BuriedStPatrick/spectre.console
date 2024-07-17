@@ -174,7 +174,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
                 });
             });
 
@@ -205,7 +205,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
                 });
             });
 
@@ -237,7 +237,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
                 });
             });
 

@@ -56,7 +56,7 @@ public sealed partial class CommandAppTests
                         .AddBranch<MammalSettings>("mammal", mammal =>
                     {
                         mammal.SafetyOff().AddCommand("dog", typeof(DogCommand));
-                        mammal.AddCommand<HorseCommand>("horse");
+                        mammal.AddCommand<HorseCommand, HorseSettings>("horse");
                     });
                 });
             });
@@ -92,7 +92,7 @@ public sealed partial class CommandAppTests
 
                 config.SafetyOff().AddBranch("animal", typeof(AnimalSettings), animal =>
                 {
-                    animal.SafetyOn<MammalSettings>().AddCommand<DogCommand>("dog");
+                    animal.SafetyOn<MammalSettings>().AddCommand<DogCommand, DogSettings>("dog");
                 });
             }));
 

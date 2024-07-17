@@ -16,7 +16,7 @@ public sealed class CommandContext
     /// <summary>
     /// Gets all the arguments that were passed to the applicaton.
     /// </summary>
-    public IReadOnlyList<string> Arguments { get; }
+    public string[] Arguments { get; }
 
     /// <summary>
     /// Gets the name of the command.
@@ -42,14 +42,14 @@ public sealed class CommandContext
     /// <param name="name">The command name.</param>
     /// <param name="data">The command data.</param>
     public CommandContext(
-        IEnumerable<string> arguments,
+        string[] arguments,
         IRemainingArguments remaining,
         string name,
         object? data)
     {
-        Arguments = arguments.ToSafeReadOnlyList();
-        Remaining = remaining ?? throw new System.ArgumentNullException(nameof(remaining));
-        Name = name ?? throw new System.ArgumentNullException(nameof(name));
+        Arguments = arguments;
+        Remaining = remaining ?? throw new ArgumentNullException(nameof(remaining));
+        Name = name ?? throw new ArgumentNullException(nameof(name));
         Data = data;
     }
 }

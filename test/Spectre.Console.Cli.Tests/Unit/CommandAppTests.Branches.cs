@@ -196,7 +196,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
 
                     animal.SetDefaultCommand<CatCommand>();
                 });
@@ -223,7 +223,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
 
                     animal.SetDefaultCommand<LionCommand>();
                 });
@@ -258,8 +258,8 @@ public sealed partial class CommandAppTests
                 {
                     animal.AddBranch<MammalSettings>("mammal", mammal =>
                     {
-                        mammal.AddCommand<DogCommand>("dog");
-                        mammal.AddCommand<CatCommand>("cat");
+                        mammal.AddCommand<DogCommand, DogSettings>("dog");
+                        mammal.AddCommand<CatCommand, CatSettings>("cat");
                     });
                 });
             });
@@ -292,8 +292,8 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
-                    animal.AddCommand<CatCommand>("cat");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
+                    animal.AddCommand<CatCommand, CatSettings>("cat");
                 });
             });
 
@@ -325,7 +325,7 @@ public sealed partial class CommandAppTests
                 config.PropagateExceptions();
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
                 });
             });
 

@@ -101,7 +101,7 @@ public sealed partial class CommandAppTests
                     config.PropagateExceptions();
                     config.AddBranch<CustomBaseCommandSettings>("foo", b =>
                     {
-                        b.AddCommand<CustomInheritedCommand>("bar");
+                        b.AddCommand<CustomInheritedCommand, CustomInheritedCommandSettings>("bar");
                     });
                 });
 

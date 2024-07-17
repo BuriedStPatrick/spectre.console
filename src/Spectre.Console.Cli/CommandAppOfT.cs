@@ -1,3 +1,4 @@
+using System.Threading;
 using Spectre.Console.Cli.Internal.Configuration;
 
 namespace Spectre.Console.Cli;
@@ -6,8 +7,8 @@ namespace Spectre.Console.Cli;
 /// The entry point for a command line application with a default command.
 /// </summary>
 /// <typeparam name="TDefaultCommand">The type of the default command.</typeparam>
-public sealed class CommandApp<TDefaultCommand> : ICommandApp
-    where TDefaultCommand : class, ICommand
+public sealed class CommandApp<TDefaultCommand> : ICommandApp<CommandApp<TDefaultCommand>, Configurator>
+    where TDefaultCommand : ICommand
 {
     private readonly CommandApp _app;
     private readonly DefaultCommandConfigurator _defaultCommandConfigurator;
@@ -22,39 +23,24 @@ public sealed class CommandApp<TDefaultCommand> : ICommandApp
         _defaultCommandConfigurator = _app.SetDefaultCommand<TDefaultCommand>();
     }
 
-    /// <summary>
-    /// Configures the command line application.
-    /// </summary>
-    /// <param name="configuration">The configuration.</param>
-    public void Configure(Action<IConfigurator> configuration)
+    /// <inheritdoc />
+    public CommandApp<TDefaultCommand> Configure(Action<Configurator> configureConfigurator)
     {
-        _app.Configure(configuration);
+        _app.Configure(configureConfigurator);
+
+        return this;
     }
 
-    /// <summary>
-    /// Runs the command line application with specified arguments.
-    /// </summary>
-    /// <param name="args">The arguments.</param>
-    /// <returns>The exit code from the executed command.</returns>
-    public int Run(IEnumerable<string> args)
-    {
-        return _app.Run(args);
-    }
+    /// <inheritdoc cref="ICommandApp{TCommandApp}.Run"/>
+    public int Run(string[] args)
+        => _app.Run(args);
 
-    /// <summary>
-    /// Runs the command line application with specified arguments.
-    /// </summary>
-    /// <param name="args">The arguments.</param>
-    /// <returns>The exit code from the executed command.</returns>
-    public Task<int> RunAsync(IEnumerable<string> args)
-    {
-        return _app.RunAsync(args);
-    }
+    /// <inheritdoc cref="ICommandApp.RunAsync" />
+    public Task<int> RunAsync(string[] args, CancellationToken cancellationToken = default)
+        => _app.RunAsync(args, cancellationToken);
 
     internal Configurator GetConfigurator()
-    {
-        return _app.GetConfigurator();
-    }
+        => _app.GetConfigurator();
 
     /// <summary>
     /// Sets the description of the default command.

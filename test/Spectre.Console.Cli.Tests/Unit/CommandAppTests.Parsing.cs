@@ -54,7 +54,7 @@ public sealed partial class CommandAppTests
                 {
                     config.AddBranch<CommandSettings>("dog", a =>
                     {
-                        a.AddCommand<CatCommand>("cat");
+                        a.AddCommand<CatCommand, CatSettings>("cat");
                     });
                 });
 
@@ -113,7 +113,7 @@ public sealed partial class CommandAppTests
                 {
                     configurator.AddBranch<CommandSettings>("dog", a =>
                     {
-                        a.AddCommand<CatCommand>("cat");
+                        a.AddCommand<CatCommand, CatSettings>("cat");
                     });
                 });
 
@@ -153,7 +153,7 @@ public sealed partial class CommandAppTests
                 {
                     configurator.AddBranch<FooCommandSettings>("foo", a =>
                     {
-                        a.AddCommand<GenericCommand<BarCommandSettings>>("bar");
+                        a.AddCommand<GenericCommand<BarCommandSettings>, BarCommandSettings>("bar");
                     });
                 });
 

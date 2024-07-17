@@ -5,11 +5,11 @@ namespace Spectre.Console.Cli.Internal.Configuration;
 /// </summary>
 public sealed class DefaultCommandConfigurator
 {
-    private readonly ConfiguredCommand _defaultCommand;
+    private readonly CommandDefinitionBuilder<,> _defaultCommandDefinitionBuilder;
 
-    internal DefaultCommandConfigurator(ConfiguredCommand defaultCommand)
+    internal DefaultCommandConfigurator(CommandDefinitionBuilder<,> defaultCommandDefinitionBuilder)
     {
-        _defaultCommand = defaultCommand;
+        _defaultCommandDefinitionBuilder = defaultCommandDefinitionBuilder;
     }
 
     /// <summary>
@@ -19,7 +19,7 @@ public sealed class DefaultCommandConfigurator
     /// <returns>The same <see cref="DefaultCommandConfigurator"/> instance so that multiple calls can be chained.</returns>
     public DefaultCommandConfigurator WithDescription(string description)
     {
-        _defaultCommand.Description = description;
+        _defaultCommandDefinitionBuilder.Description = description;
         return this;
     }
 
@@ -30,7 +30,7 @@ public sealed class DefaultCommandConfigurator
     /// <returns>The same <see cref="DefaultCommandConfigurator"/> instance so that multiple calls can be chained.</returns>
     public DefaultCommandConfigurator WithData(object data)
     {
-        _defaultCommand.Data = data;
+        _defaultCommandDefinitionBuilder.Data = data;
         return this;
     }
 }

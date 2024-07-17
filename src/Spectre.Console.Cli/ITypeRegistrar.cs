@@ -20,6 +20,14 @@ public interface ITypeRegistrar
     void RegisterInstance(Type service, object implementation);
 
     /// <summary>
+    /// Registers the specified instance.
+    /// </summary>
+    /// <param name="implementation">The implementation instance.</param>
+    /// <typeparam name="TImplementation">The implementation type.</typeparam>
+    void RegisterInstance<TImplementation>(TImplementation implementation)
+        where TImplementation : class;
+
+    /// <summary>
     /// Registers the specified instance lazily.
     /// </summary>
     /// <param name="service">The service.</param>

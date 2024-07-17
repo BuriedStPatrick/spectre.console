@@ -33,6 +33,11 @@ internal sealed class DefaultTypeRegistrar : ITypeRegistrar
         _registry.Enqueue(registry => registry.Register(registration));
     }
 
+    public void RegisterInstance<TImplementation>(TImplementation implementation)
+    {
+        RegisterInstance(typeof(TImplementation), implementation);
+    }
+
     public void RegisterLazy(Type service, Func<object> factory)
     {
         if (factory is null)

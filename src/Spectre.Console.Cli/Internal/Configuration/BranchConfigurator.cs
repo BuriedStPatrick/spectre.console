@@ -1,17 +1,18 @@
 namespace Spectre.Console.Cli;
 
-internal sealed class BranchConfigurator : IBranchConfigurator
+internal sealed class BranchConfigurator : IBranchConfigurator<BranchConfigurator>
 {
-    public ConfiguredCommand Command { get; }
+    public ICommandDefinitionBuilder CommandDefinitionBuilder { get; }
 
-    public BranchConfigurator(ConfiguredCommand command)
+    public BranchConfigurator(ICommandDefinitionBuilder commandBuilder)
     {
-        Command = command;
+        CommandDefinitionBuilder = commandBuilder;
     }
 
-    public IBranchConfigurator WithAlias(string alias)
+    public BranchConfigurator WithAlias(string alias)
     {
-        Command.Aliases.Add(alias);
+        CommandDefinitionBuilder.Aliases.Add(alias);
+
         return this;
     }
 }

@@ -11,4 +11,11 @@ public interface ITypeResolver
     /// <param name="type">The type to resolve.</param>
     /// <returns>An instance of the specified type, or <c>null</c> if no registration for the specified type exists.</returns>
     object? Resolve(Type? type);
+
+    /// <summary>
+    /// Resolves an instance of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type to resolve</typeparam>
+    /// <returns>An instance of the specified type, or <c>null</c> if no registration for the specified type exists.</returns>
+    T? Resolve<T>();
 }

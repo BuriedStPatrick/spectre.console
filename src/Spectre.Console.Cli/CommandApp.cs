@@ -1,11 +1,200 @@
+using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli.Internal.Configuration;
 
 namespace Spectre.Console.Cli;
 
+public static class Test
+{
+    public static async Task<int> DoIt()
+    {
+        var args = new[] { "asd", "asd" };
+        var services = new ServiceCollection();
+
+        var app = new CommandLineAppBuilder()
+            .WithServiceCollectionTypeRegistrar(services)
+            .WithDefaults()
+
+            // Same as just propagating the exception. No need for an additional setting
+            .WithExceptionHandler((exception, _) => throw exception)
+
+            // Build the app
+            .Build();
+
+        return await app.RunAsync(
+            args,
+            CancellationToken.None);
+    }
+}
+
+public sealed class CommandLineApp
+{
+    private readonly ICommandAppSettings _commandAppSettings;
+    private readonly ITypeRegistrar? _typeRegistrar;
+    private readonly CommandLineAsyncExceptionHandler? _exceptionHandler;
+
+    public CommandLineApp(
+        ICommandAppSettings commandAppSettings,
+        ITypeRegistrar? typeRegistrar,
+        CommandLineAsyncExceptionHandler? exceptionHandler)
+    {
+        _commandAppSettings = commandAppSettings;
+        _typeRegistrar = typeRegistrar;
+        _exceptionHandler = exceptionHandler;
+    }
+
+    public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken)
+    {
+        // TODO: implement
+        return 0;
+    }
+}
+
+public interface ICommandLineExceptionHandler
+{
+    void Handle(Exception exception);
+}
+
+public interface ICommandLineAsyncExceptionHandler
+{
+    Task Handle(Exception exception, CancellationToken cancellationToken = default);
+}
+
+public delegate void CommandLineExceptionHandler(
+    Exception exception,
+    ITypeResolver? typeResolver);
+
+public delegate Task CommandLineAsyncExceptionHandler(
+    Exception exception,
+    ITypeResolver? typeResolver,
+    CancellationToken cancellationToken = default);
+
+public sealed class CommandLineAppBuilder
+{
+    private Action<ICommandAppSettings>? _configureCommandApp;
+    private CommandLineAsyncExceptionHandler? _asyncExceptionHandler;
+    private ITypeRegistrar? _typeRegistrar;
+    private Action<ITypeRegistrar>? _configureTypeRegistrar;
+
+    public CommandLineAppBuilder ConfigureApp(Action<ICommandAppSettings> configureCommandApp)
+    {
+        _configureCommandApp += configureCommandApp;
+
+        return this;
+    }
+
+    public CommandLineAppBuilder WithExceptionHandler(CommandLineExceptionHandler exceptionHandler)
+    {
+        _asyncExceptionHandler += (exception, resolver, _) =>
+        {
+            exceptionHandler(exception, resolver);
+
+            return Task.CompletedTask;
+        };
+
+        return this;
+    }
+
+    public CommandLineAppBuilder WithAsyncExceptionHandler(CommandLineAsyncExceptionHandler exceptionHandler)
+    {
+        _asyncExceptionHandler += exceptionHandler;
+
+        return this;
+    }
+
+    public CommandLineAppBuilder WithExceptionHandler<TExceptionHandler>()
+        where TExceptionHandler : ICommandLineExceptionHandler
+    {
+        ConfigureTypeRegistrar(registrar
+            => registrar.Register(typeof(TExceptionHandler), typeof(TExceptionHandler)));
+
+        _asyncExceptionHandler += (exception, resolver, _) =>
+        {
+            if (resolver is not null)
+            {
+                var handler = resolver.Resolve<TExceptionHandler>();
+
+                handler?.Handle(exception);
+            }
+
+            return Task.CompletedTask;
+        };
+
+        return this;
+    }
+
+    public CommandLineAppBuilder WithAsyncExceptionHandler<TAsyncExceptionHandler>()
+        where TAsyncExceptionHandler : ICommandLineAsyncExceptionHandler
+    {
+        ConfigureTypeRegistrar(registrar
+            => registrar.Register(typeof(TAsyncExceptionHandler), typeof(TAsyncExceptionHandler)));
+
+        _asyncExceptionHandler += async (exception, resolver, cancellationToken) =>
+        {
+            if (resolver is not null)
+            {
+                var handler = resolver.Resolve<TAsyncExceptionHandler>();
+
+                if (handler is not null)
+                {
+                    await handler.Handle(exception, cancellationToken);
+                }
+            }
+        };
+
+        return this;
+    }
+
+    public CommandLineAppBuilder ConfigureTypeRegistrar(Action<ITypeRegistrar> configureTypeRegistrar)
+    {
+        _configureTypeRegistrar += configureTypeRegistrar;
+
+        return this;
+    }
+
+    public CommandLineAppBuilder WithTypeRegistrar(ITypeRegistrar typeRegistrar)
+    {
+        _typeRegistrar = typeRegistrar;
+
+        return this;
+    }
+
+    internal CommandLineApp Build()
+    {
+        var commandAppSettings = new CommandAppSettings();
+        _configureCommandApp?.Invoke(commandAppSettings);
+
+        if (_typeRegistrar is not null)
+        {
+            _configureTypeRegistrar?.Invoke(_typeRegistrar);
+        }
+
+        return new CommandLineApp(
+            commandAppSettings,
+            _typeRegistrar,
+            _asyncExceptionHandler);
+    }
+}
+
+public static class CommandLineAppBuilderExtensions
+{
+    public static CommandLineAppBuilder WithDefaults(this CommandLineAppBuilder commandLineAppBuilder) =>
+        commandLineAppBuilder.ConfigureApp(app =>
+        {
+            app.Console = AnsiConsole.Console;
+            app.CaseSensitivity = CaseSensitivity.None;
+        });
+
+    public static CommandLineAppBuilder WithServiceCollectionTypeRegistrar(
+        this CommandLineAppBuilder commandLineAppBuilder,
+        IServiceCollection serviceCollection) =>
+        commandLineAppBuilder.WithTypeRegistrar(new ServiceCollectionTypeRegistrar(serviceCollection));
+}
+
 /// <summary>
 /// The entry point for a command line application.
 /// </summary>
-public sealed class CommandApp : ICommandApp
+public sealed class CommandApp : ICommandApp<CommandApp, Configurator>
 {
     private readonly Configurator _configurator;
     private readonly CommandExecutor _executor;
@@ -23,18 +212,12 @@ public sealed class CommandApp : ICommandApp
         _executor = new CommandExecutor(registrar);
     }
 
-    /// <summary>
-    /// Configures the command line application.
-    /// </summary>
-    /// <param name="configuration">The configuration.</param>
-    public void Configure(Action<IConfigurator> configuration)
+    /// <inheritdoc />
+    public CommandApp Configure(Action<Configurator> configureConfigurator)
     {
-        if (configuration == null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
+        configureConfigurator(_configurator);
 
-        configuration(_configurator);
+        return this;
     }
 
     /// <summary>
@@ -53,7 +236,7 @@ public sealed class CommandApp : ICommandApp
     /// </summary>
     /// <param name="args">The arguments.</param>
     /// <returns>The exit code from the executed command.</returns>
-    public int Run(IEnumerable<string> args)
+    public int Run(string[] args)
     {
         return RunAsync(args).GetAwaiter().GetResult();
     }
@@ -63,7 +246,7 @@ public sealed class CommandApp : ICommandApp
     /// </summary>
     /// <param name="args">The arguments.</param>
     /// <returns>The exit code from the executed command.</returns>
-    public async Task<int> RunAsync(IEnumerable<string> args)
+    public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -116,10 +299,7 @@ public sealed class CommandApp : ICommandApp
         }
     }
 
-    internal Configurator GetConfigurator()
-    {
-        return _configurator;
-    }
+    internal Configurator GetConfigurator() => _configurator;
 
     private static List<IRenderable?>? GetRenderableErrorMessage(Exception ex, bool convert = true)
     {

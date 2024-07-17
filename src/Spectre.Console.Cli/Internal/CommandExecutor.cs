@@ -10,15 +10,8 @@ internal sealed class CommandExecutor
         _registrar.Register(typeof(DefaultPairDeconstructor), typeof(DefaultPairDeconstructor));
     }
 
-    public async Task<int> Execute(IConfiguration configuration, IEnumerable<string> args)
+    public async Task<int> Execute(IConfiguration configuration, string[] args)
     {
-        if (configuration == null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
-
-        var arguments = args.ToSafeReadOnlyList();
-
         _registrar.RegisterInstance(typeof(IConfiguration), configuration);
         _registrar.RegisterLazy(typeof(IAnsiConsole), () => configuration.Settings.Console.GetConsole());
 
@@ -31,7 +24,7 @@ internal sealed class CommandExecutor
         if (model.DefaultCommand == null)
         {
             // Got at least one argument?
-            var firstArgument = arguments.FirstOrDefault();
+            var firstArgument = args.FirstOrDefault();
             if (firstArgument != null)
             {
                 // Asking for version? Kind of a hack, but it's alright.
@@ -50,7 +43,7 @@ internal sealed class CommandExecutor
         }
 
         // Parse and map the model against the arguments.
-        var parsedResult = ParseCommandLineArguments(model, configuration.Settings, arguments);
+        var parsedResult = ParseCommandLineArguments(model, configuration.Settings, args);
 
         // Register the arguments with the container.
         _registrar.RegisterInstance(typeof(CommandTreeParserResult), parsedResult);
@@ -82,7 +75,7 @@ internal sealed class CommandExecutor
             }
 
             // Is this the default and is it called without arguments when there are required arguments?
-            if (leaf.Command.IsDefaultCommand && arguments.Count == 0 && leaf.Command.Parameters.Any(p => p.Required))
+            if (leaf.Command.IsDefaultCommand && args.Length == 0 && leaf.Command.Parameters.Any(p => p.Required))
             {
                 // Display help for default command.
                 configuration.Settings.Console.SafeRender(helpProvider.Write(model, leaf.Command));
@@ -91,7 +84,7 @@ internal sealed class CommandExecutor
 
             // Create the content.
             var context = new CommandContext(
-                arguments,
+                args,
                 parsedResult.Remaining,
                 leaf.Command.Name,
                 leaf.Command.Data);

@@ -150,7 +150,7 @@ public sealed partial class CommandAppTests
                 configurator.AddBranch<CatSettings>("cat", animal =>
                 {
                     animal.SetDescription("Contains settings for a cat.");
-                    animal.AddCommand<LionCommand>("lion");
+                    animal.AddCommand<LionCommand, LionSettings>("lion");
                 });
             });
 
@@ -173,7 +173,7 @@ public sealed partial class CommandAppTests
                 configurator.AddBranch<CatSettings>("cat", animal =>
                 {
                     animal.SetDescription("Contains settings for a cat.");
-                    animal.AddCommand<LionCommand>("lion");
+                    animal.AddCommand<LionCommand, LionSettings>("lion");
                 });
             });
 
@@ -196,7 +196,7 @@ public sealed partial class CommandAppTests
                 configurator.AddBranch<OptionalArgumentWithDefaultValueSettings>("branch", animal =>
                 {
                     animal.SetDefaultCommand<GreeterCommand>();
-                    animal.AddCommand<GreeterCommand>("greeter");
+                    animal.AddCommand<GreeterCommand, OptionalArgumentWithDefaultValueSettings>("greeter");
                 });
             });
 
@@ -219,7 +219,7 @@ public sealed partial class CommandAppTests
                 configurator.AddBranch<CatSettings>("cat", animal =>
                 {
                     animal.SetDescription("Contains settings for a cat.");
-                    animal.AddCommand<LionCommand>("lion");
+                    animal.AddCommand<LionCommand, LionSettings>("lion");
                 });
                 configurator.HideOptionDefaultValues();
             });
@@ -243,7 +243,7 @@ public sealed partial class CommandAppTests
                 configurator.AddBranch<CatSettings>("cat", animal =>
                 {
                     animal.SetDescription("Contains settings for a cat.");
-                    animal.AddCommand<LionCommand>("lion");
+                    animal.AddCommand<LionCommand, LionSettings>("lion");
                 });
             });
 
@@ -738,7 +738,7 @@ public sealed partial class CommandAppTests
 
                     // It should be capped to the first 5 examples by default
 
-                    animal.AddCommand<DogCommand>("dog")
+                    animal.AddCommand<DogCommand, DogSettings>("dog")
                         .WithExample("animal", "dog", "--name", "Rufus", "--age", "12", "--good-boy")
                         .WithExample("animal", "dog", "--name", "Luna")
                         .WithExample("animal", "dog", "--name", "Charlie")
@@ -746,7 +746,7 @@ public sealed partial class CommandAppTests
                         .WithExample("animal", "dog", "--name", "Daisy")
                         .WithExample("animal", "dog", "--name", "Milo");
 
-                    animal.AddCommand<HorseCommand>("horse")
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse")
                         .WithExample("animal", "horse", "--name", "Brutus")
                         .WithExample("animal", "horse", "--name", "Sugar", "--IsAlive", "false")
                         .WithExample("animal", "horse", "--name", "Cash")
@@ -779,7 +779,7 @@ public sealed partial class CommandAppTests
                     // Show the first 8 examples defined on the direct children
                     configurator.Settings.MaximumIndirectExamples = 8;
 
-                    animal.AddCommand<DogCommand>("dog")
+                    animal.AddCommand<DogCommand, DogSettings>("dog")
                         .WithExample("animal", "dog", "--name", "Rufus", "--age", "12", "--good-boy")
                         .WithExample("animal", "dog", "--name", "Luna")
                         .WithExample("animal", "dog", "--name", "Charlie")
@@ -787,7 +787,7 @@ public sealed partial class CommandAppTests
                         .WithExample("animal", "dog", "--name", "Daisy")
                         .WithExample("animal", "dog", "--name", "Milo");
 
-                    animal.AddCommand<HorseCommand>("horse")
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse")
                         .WithExample("animal", "horse", "--name", "Brutus")
                         .WithExample("animal", "horse", "--name", "Sugar", "--IsAlive", "false")
                         .WithExample("animal", "horse", "--name", "Cash")
@@ -820,7 +820,7 @@ public sealed partial class CommandAppTests
                     // Show all examples defined on the direct children
                     configurator.Settings.MaximumIndirectExamples = int.MaxValue;
 
-                    animal.AddCommand<DogCommand>("dog")
+                    animal.AddCommand<DogCommand, DogSettings>("dog")
                         .WithExample("animal", "dog", "--name", "Rufus", "--age", "12", "--good-boy")
                         .WithExample("animal", "dog", "--name", "Luna")
                         .WithExample("animal", "dog", "--name", "Charlie")
@@ -828,7 +828,7 @@ public sealed partial class CommandAppTests
                         .WithExample("animal", "dog", "--name", "Daisy")
                         .WithExample("animal", "dog", "--name", "Milo");
 
-                    animal.AddCommand<HorseCommand>("horse")
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse")
                         .WithExample("animal", "horse", "--name", "Brutus")
                         .WithExample("animal", "horse", "--name", "Sugar", "--IsAlive", "false")
                         .WithExample("animal", "horse", "--name", "Cash")
@@ -861,7 +861,7 @@ public sealed partial class CommandAppTests
                     // Do not show examples defined on the direct children
                     configurator.Settings.MaximumIndirectExamples = 0;
 
-                    animal.AddCommand<DogCommand>("dog")
+                    animal.AddCommand<DogCommand, DogSettings>("dog")
                         .WithExample("animal", "dog", "--name", "Rufus", "--age", "12", "--good-boy")
                         .WithExample("animal", "dog", "--name", "Luna")
                         .WithExample("animal", "dog", "--name", "Charlie")
@@ -869,7 +869,7 @@ public sealed partial class CommandAppTests
                         .WithExample("animal", "dog", "--name", "Daisy")
                         .WithExample("animal", "dog", "--name", "Milo");
 
-                    animal.AddCommand<HorseCommand>("horse")
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse")
                         .WithExample("animal", "horse", "--name", "Brutus")
                         .WithExample("animal", "horse", "--name", "Sugar", "--IsAlive", "false")
                         .WithExample("animal", "horse", "--name", "Cash")
@@ -913,9 +913,9 @@ public sealed partial class CommandAppTests
                     animal.AddExample("animal", "horse", "--name", "Cisco");
                     animal.AddExample("animal", "horse", "--name", "Spirit");
 
-                    animal.AddCommand<DogCommand>("dog")
+                    animal.AddCommand<DogCommand, DogSettings>("dog")
                         .WithExample("animal", "dog", "--name", "Rufus", "--age", "12", "--good-boy");
-                    animal.AddCommand<HorseCommand>("horse")
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse")
                         .WithExample("animal", "horse", "--name", "Brutus");
                 });
             });

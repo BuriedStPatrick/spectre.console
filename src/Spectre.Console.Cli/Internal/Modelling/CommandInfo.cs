@@ -28,7 +28,7 @@ internal sealed class CommandInfo : ICommandContainer, ICommandInfo
     ICommandInfo? ICommandInfo.Parent => Parent;
     IReadOnlyList<string[]> Help.ICommandContainer.Examples => (IReadOnlyList<string[]>)Examples;
 
-    public CommandInfo(CommandInfo? parent, ConfiguredCommand prototype)
+    public CommandInfo(CommandInfo? parent, CommandDefinitionBuilder<,> prototype)
     {
         Parent = parent;
 

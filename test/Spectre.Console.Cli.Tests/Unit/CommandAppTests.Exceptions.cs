@@ -13,8 +13,8 @@ public sealed partial class CommandAppTests
             {
                 config.AddBranch<AnimalSettings>("animal", animal =>
                 {
-                    animal.AddCommand<DogCommand>("dog");
-                    animal.AddCommand<HorseCommand>("horse");
+                    animal.AddCommand<DogCommand, DogSettings>("dog");
+                    animal.AddCommand<HorseCommand, HorseSettings>("horse");
                 });
             });
 

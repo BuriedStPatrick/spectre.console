@@ -10,7 +10,6 @@ internal sealed class CommandAppSettings : ICommandAppSettings
     public IAnsiConsole? Console { get; set; }
     [Obsolete("Register the interceptor with the ITypeRegistrar.")]
     public ICommandInterceptor? Interceptor { get; set; }
-    public ITypeRegistrarFrontend Registrar { get; set; }
     public CaseSensitivity CaseSensitivity { get; set; }
     public bool PropagateExceptions { get; set; }
     public bool ValidateExamples { get; set; }
@@ -24,9 +23,8 @@ internal sealed class CommandAppSettings : ICommandAppSettings
 
     public Func<Exception, ITypeResolver?, int>? ExceptionHandler { get; set; }
 
-    public CommandAppSettings(ITypeRegistrar registrar)
+    public CommandAppSettings()
     {
-        Registrar = new TypeRegistrar(registrar);
         CaseSensitivity = CaseSensitivity.All;
         ShowOptionDefaultValues = true;
         MaximumIndirectExamples = 5;
