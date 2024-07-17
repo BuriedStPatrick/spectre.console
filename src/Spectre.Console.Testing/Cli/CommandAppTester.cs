@@ -157,7 +157,7 @@ public sealed class CommandAppTester
     private async Task<CommandAppResult> RunAsync(string[] args, TestConsole console, Action<IConfigurator>? config = null)
     {
         CommandContext? context = null;
-        CommandSettings? settings = null;
+        ICommandSettings? settings = null;
 
         var app = new CommandApp(Registrar);
         _appConfiguration?.Invoke(app);

@@ -23,9 +23,9 @@ public sealed class CommandAppResult
     /// <summary>
     /// Gets the command settings.
     /// </summary>
-    public CommandSettings? Settings { get; }
+    public ICommandSettings? Settings { get; }
 
-    internal CommandAppResult(int exitCode, string output, CommandContext? context, CommandSettings? settings)
+    internal CommandAppResult(int exitCode, string output, CommandContext? context, ICommandSettings? settings)
     {
         ExitCode = exitCode;
         Output = output ?? string.Empty;

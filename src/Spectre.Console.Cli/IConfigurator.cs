@@ -46,7 +46,7 @@ public interface IConfigurator
     /// <param name="func">The delegate to execute as part of command execution.</param>
     /// <returns>A command configurator that can be used to configure the command further.</returns>
     ICommandConfigurator AddDelegate<TSettings>(string name, Func<CommandContext, TSettings, int> func)
-        where TSettings : CommandSettings;
+        where TSettings : ICommandSettings;
 
     /// <summary>
     /// Adds a command that executes an async delegate.
@@ -56,7 +56,7 @@ public interface IConfigurator
     /// <param name="func">The delegate to execute as part of command execution.</param>
     /// <returns>A command configurator that can be used to configure the command further.</returns>
     ICommandConfigurator AddAsyncDelegate<TSettings>(string name, Func<CommandContext, TSettings, Task<int>> func)
-        where TSettings : CommandSettings;
+        where TSettings : ICommandSettings;
 
     /// <summary>
     /// Adds a command branch.
@@ -66,5 +66,5 @@ public interface IConfigurator
     /// <param name="action">The command branch configurator.</param>
     /// <returns>A branch configurator that can be used to configure the branch further.</returns>
     IBranchConfigurator AddBranch<TSettings>(string name, Action<IConfigurator<TSettings>> action)
-        where TSettings : CommandSettings;
+        where TSettings : ICommandSettings;
 }

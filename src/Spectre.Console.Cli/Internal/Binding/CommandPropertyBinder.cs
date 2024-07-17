@@ -2,7 +2,7 @@ namespace Spectre.Console.Cli;
 
 internal static class CommandPropertyBinder
 {
-    public static CommandSettings CreateSettings(CommandValueLookup lookup, Type settingsType, ITypeResolver resolver)
+    public static ICommandSettings CreateSettings(CommandValueLookup lookup, Type settingsType, ITypeResolver resolver)
     {
         var settings = CreateSettings(resolver, settingsType);
 
@@ -24,14 +24,14 @@ internal static class CommandPropertyBinder
         return settings;
     }
 
-    private static CommandSettings CreateSettings(ITypeResolver resolver, Type settingsType)
+    private static ICommandSettings CreateSettings(ITypeResolver resolver, Type settingsType)
     {
-        if (resolver.Resolve(settingsType) is CommandSettings settings)
+        if (resolver.Resolve(settingsType) is ICommandSettings settings)
         {
             return settings;
         }
 
-        if (Activator.CreateInstance(settingsType) is CommandSettings instance)
+        if (Activator.CreateInstance(settingsType) is ICommandSettings instance)
         {
             return instance;
         }

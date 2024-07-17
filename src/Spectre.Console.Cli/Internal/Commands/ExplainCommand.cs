@@ -13,7 +13,7 @@ internal sealed class ExplainCommand : Command<ExplainCommand.Settings>
         _writer = configuration.Settings.Console.GetConsole();
     }
 
-    public sealed class Settings : CommandSettings
+    internal sealed class Settings : CommandSettings
     {
         [CommandArgument(0, "[command]")]
         public string[]? Commands { get; set; }

@@ -45,7 +45,7 @@ public static class UnsafeConfiguratorExtensions
     /// <param name="configurator">The configurator.</param>
     /// <returns>An <see cref="IUnsafeConfigurator"/>.</returns>
     public static IUnsafeConfigurator SafetyOff<TSettings>(this IConfigurator<TSettings> configurator)
-        where TSettings : CommandSettings
+        where TSettings : ICommandSettings
     {
         if (!(configurator is IUnsafeConfigurator @unsafe))
         {
@@ -63,7 +63,7 @@ public static class UnsafeConfiguratorExtensions
     /// <param name="configurator">The configurator.</param>
     /// <returns>An <see cref="IConfigurator{TSettings}"/>.</returns>
     public static IConfigurator<TSettings> SafetyOn<TSettings>(this IUnsafeBranchConfigurator configurator)
-        where TSettings : CommandSettings
+        where TSettings : ICommandSettings
     {
         if (!(configurator is IConfigurator<TSettings> safe))
         {

@@ -8,7 +8,7 @@ internal sealed class ConfiguredCommand
     public object? Data { get; set; }
     public Type? CommandType { get; }
     public Type SettingsType { get; }
-    public Func<CommandContext, CommandSettings, Task<int>>? Delegate { get; }
+    public Func<CommandContext, ICommandSettings, Task<int>>? Delegate { get; }
     public bool IsDefaultCommand { get; }
     public bool IsHidden { get; set; }
 
@@ -19,7 +19,7 @@ internal sealed class ConfiguredCommand
         string name,
         Type? commandType,
         Type settingsType,
-        Func<CommandContext, CommandSettings, Task<int>>? @delegate,
+        Func<CommandContext, ICommandSettings, Task<int>>? @delegate,
         bool isDefaultCommand)
     {
         Name = name;
@@ -42,7 +42,7 @@ internal sealed class ConfiguredCommand
     }
 
     public static ConfiguredCommand FromBranch<TSettings>(string name)
-        where TSettings : CommandSettings
+        where TSettings : ICommandSettings
     {
         return new ConfiguredCommand(name, null, typeof(TSettings), null, false);
     }
@@ -60,8 +60,8 @@ internal sealed class ConfiguredCommand
     }
 
     public static ConfiguredCommand FromDelegate<TSettings>(
-        string name, Func<CommandContext, CommandSettings, Task<int>>? @delegate = null)
-        where TSettings : CommandSettings
+        string name, Func<CommandContext, ICommandSettings, Task<int>>? @delegate = null)
+        where TSettings : ICommandSettings
     {
         return new ConfiguredCommand(name, null, typeof(TSettings), @delegate, false);
     }

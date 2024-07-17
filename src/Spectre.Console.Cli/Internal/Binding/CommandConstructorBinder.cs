@@ -2,7 +2,7 @@ namespace Spectre.Console.Cli;
 
 internal static class CommandConstructorBinder
 {
-    public static CommandSettings CreateSettings(CommandValueLookup lookup, ConstructorInfo constructor, ITypeResolver resolver)
+    public static ICommandSettings CreateSettings(CommandValueLookup lookup, ConstructorInfo constructor, ITypeResolver resolver)
     {
         if (constructor.DeclaringType == null)
         {
@@ -31,7 +31,7 @@ internal static class CommandConstructorBinder
         }
 
         // Create the settings.
-        if (!(Activator.CreateInstance(constructor.DeclaringType, parameters.ToArray()) is CommandSettings settings))
+        if (Activator.CreateInstance(constructor.DeclaringType, parameters.ToArray()) is not ICommandSettings settings)
         {
             throw new InvalidOperationException("Could not create settings");
         }

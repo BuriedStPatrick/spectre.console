@@ -20,13 +20,13 @@ public abstract class Command : ICommand<EmptyCommandSettings>
     }
 
     /// <inheritdoc/>
-    Task<int> ICommand.Execute(CommandContext context, CommandSettings settings)
+    Task<int> ICommand.Execute(CommandContext context, ICommandSettings settings)
     {
         return Task.FromResult(Execute(context));
     }
 
     /// <inheritdoc/>
-    ValidationResult ICommand.Validate(CommandContext context, CommandSettings settings)
+    ValidationResult ICommand.Validate(CommandContext context, ICommandSettings settings)
     {
         return ValidationResult.Success();
     }

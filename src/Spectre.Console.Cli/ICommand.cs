@@ -11,7 +11,7 @@ public interface ICommand
     /// <param name="context">The command context.</param>
     /// <param name="settings">The settings.</param>
     /// <returns>The validation result.</returns>
-    ValidationResult Validate(CommandContext context, CommandSettings settings);
+    ValidationResult Validate(CommandContext context, ICommandSettings settings);
 
     /// <summary>
     /// Executes the command.
@@ -19,5 +19,5 @@ public interface ICommand
     /// <param name="context">The command context.</param>
     /// <param name="settings">The settings.</param>
     /// <returns>The validation result.</returns>
-    Task<int> Execute(CommandContext context, CommandSettings settings);
+    Task<int> Execute(CommandContext context, ICommandSettings settings);
 }

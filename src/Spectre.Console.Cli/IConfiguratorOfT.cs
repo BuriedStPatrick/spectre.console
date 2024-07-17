@@ -5,7 +5,7 @@ namespace Spectre.Console.Cli;
 /// </summary>
 /// <typeparam name="TSettings">The command setting type.</typeparam>
 public interface IConfigurator<in TSettings>
-    where TSettings : CommandSettings
+    where TSettings : ICommandSettings
 {
     /// <summary>
     /// Sets the description of the branch.

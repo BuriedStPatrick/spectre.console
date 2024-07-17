@@ -5,7 +5,7 @@ namespace Spectre.Console.Cli;
 /// </summary>
 /// <typeparam name="TSettings">The settings type.</typeparam>
 public interface ICommand<TSettings> : ICommandLimiter<TSettings>
-    where TSettings : CommandSettings
+    where TSettings : ICommandSettings
 {
     /// <summary>
     /// Executes the command.

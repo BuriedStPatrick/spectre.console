@@ -5,7 +5,7 @@ namespace Spectre.Console.Cli;
 /// </summary>
 /// <typeparam name="TSettings">The settings type.</typeparam>
 public abstract class AsyncCommand<TSettings> : ICommand<TSettings>
-    where TSettings : CommandSettings
+    where TSettings : ICommandSettings
 {
     /// <summary>
     /// Validates the specified settings and remaining arguments.
@@ -27,13 +27,13 @@ public abstract class AsyncCommand<TSettings> : ICommand<TSettings>
     public abstract Task<int> ExecuteAsync(CommandContext context, TSettings settings);
 
     /// <inheritdoc/>
-    ValidationResult ICommand.Validate(CommandContext context, CommandSettings settings)
+    ValidationResult ICommand.Validate(CommandContext context, ICommandSettings settings)
     {
         return Validate(context, (TSettings)settings);
     }
 
     /// <inheritdoc/>
-    Task<int> ICommand.Execute(CommandContext context, CommandSettings settings)
+    Task<int> ICommand.Execute(CommandContext context, ICommandSettings settings)
     {
         Debug.Assert(settings is TSettings, "Command settings is of unexpected type.");
         return ExecuteAsync(context, (TSettings)settings);

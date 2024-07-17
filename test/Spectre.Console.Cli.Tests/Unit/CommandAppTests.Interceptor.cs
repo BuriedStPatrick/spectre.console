@@ -16,7 +16,7 @@ public sealed partial class CommandAppTests
             }
         }
 
-        public sealed class MyInterceptor : ICommandInterceptor
+        public sealed class MyInterceptor : CommandInterceptor<CommandSettings>
         {
             private readonly Action<CommandContext, CommandSettings> _action;
 
@@ -25,13 +25,17 @@ public sealed partial class CommandAppTests
                 _action = action;
             }
 
-            public void Intercept(CommandContext context, CommandSettings settings)
+            public override void Intercept(CommandContext context, CommandSettings settings)
             {
                 _action(context, settings);
             }
+
+            public override void InterceptResult(CommandContext context, CommandSettings settings, ref int result)
+            {
+            }
         }
 
-        public sealed class MyResultInterceptor : ICommandInterceptor
+        public sealed class MyResultInterceptor : CommandInterceptor<CommandSettings>
         {
             private readonly Func<CommandContext, CommandSettings, int, int> _function;
 
@@ -40,7 +44,11 @@ public sealed partial class CommandAppTests
                 _function = function;
             }
 
-            public void InterceptResult(CommandContext context, CommandSettings settings, ref int result)
+            public override void Intercept(CommandContext context, CommandSettings settings)
+            {
+            }
+
+            public override void InterceptResult(CommandContext context, CommandSettings settings, ref int result)
             {
                 result = _function(context, settings, result);
             }

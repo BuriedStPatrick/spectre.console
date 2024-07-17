@@ -262,7 +262,7 @@ public static class ConfiguratorExtensions
     public static IBranchConfigurator AddBranch(
         this IConfigurator configurator,
         string name,
-        Action<IConfigurator<CommandSettings>> action)
+        Action<IConfigurator<ICommandSettings>> action)
     {
         if (configurator == null)
         {
@@ -284,7 +284,7 @@ public static class ConfiguratorExtensions
         this IConfigurator<TSettings> configurator,
         string name,
         Action<IConfigurator<TSettings>> action)
-            where TSettings : CommandSettings
+            where TSettings : ICommandSettings
     {
         if (configurator == null)
         {
@@ -346,7 +346,7 @@ public static class ConfiguratorExtensions
         this IConfigurator<TSettings>? configurator,
         string name,
         Func<CommandContext, int> func)
-        where TSettings : CommandSettings
+        where TSettings : ICommandSettings
     {
         if (typeof(TSettings).IsAbstract)
         {
@@ -373,7 +373,7 @@ public static class ConfiguratorExtensions
         this IConfigurator<TSettings> configurator,
         string name,
         Func<CommandContext, Task<int>> func)
-        where TSettings : CommandSettings
+        where TSettings : ICommandSettings
     {
         if (configurator == null)
         {

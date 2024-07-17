@@ -53,7 +53,7 @@ internal abstract class CommandParameter : ICommandParameterInfo, ICommandParame
         return CommandParameterComparer.ByBackingProperty.Equals(this, other);
     }
 
-    public void Assign(CommandSettings settings, ITypeResolver resolver, object? value)
+    public void Assign(ICommandSettings settings, ITypeResolver resolver, object? value)
     {
         // Is the property pair deconstructable?
         // TODO: This needs to be better defined

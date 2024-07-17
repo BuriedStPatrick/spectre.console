@@ -1,7 +1,7 @@
 namespace Spectre.Console.Cli;
 
 internal sealed class Configurator<TSettings> : IUnsafeBranchConfigurator, IConfigurator<TSettings>
-    where TSettings : CommandSettings
+    where TSettings : ICommandSettings
 {
     private readonly ConfiguredCommand _command;
     private readonly ITypeRegistrar? _registrar;

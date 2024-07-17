@@ -1,9 +1,9 @@
 namespace Spectre.Console.Testing;
 
 /// <summary>
-/// A <see cref="ICommandInterceptor"/> that triggers a callback when invoked.
+/// A <see cref="ICommandInterceptor{CommandSettings}"/> that triggers a callback when invoked.
 /// </summary>
-public sealed class CallbackCommandInterceptor : ICommandInterceptor
+public sealed class CallbackCommandInterceptor : CommandInterceptor<CommandSettings>
 {
     private readonly Action<CommandContext, CommandSettings> _callback;
 
@@ -17,9 +17,14 @@ public sealed class CallbackCommandInterceptor : ICommandInterceptor
     }
 
     /// <inheritdoc/>
-    public void Intercept(CommandContext context, CommandSettings settings)
+    public override void Intercept(CommandContext context, CommandSettings settings)
     {
         _callback(context, settings);
+    }
+
+    /// <inheritdoc/>
+    public override void InterceptResult(CommandContext context, CommandSettings settings, ref int result)
+    {
     }
 
 #if NETSTANDARD2_0
